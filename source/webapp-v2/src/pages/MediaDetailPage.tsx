@@ -3,6 +3,12 @@ import { useAsset, useAnalysis } from '@/hooks/useAnalysis';
 import { MediaPlayer } from '@/components/media/MediaPlayer';
 import { MediaHeader } from '@/components/media/MediaHeader';
 import { TechnicalInfo } from '@/components/analysis/TechnicalInfo';
+import { TranscriptionView } from '@/components/analysis/TranscriptionView';
+import { LabelsView } from '@/components/analysis/LabelsView';
+import { FacesView } from '@/components/analysis/FacesView';
+import { EntitiesView } from '@/components/analysis/EntitiesView';
+import { ModerationView } from '@/components/analysis/ModerationView';
+import { GenAIView } from '@/components/analysis/GenAIView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -33,6 +39,13 @@ export default function MediaDetailPage() {
     );
   }
 
+  const hasTranscription = analysis?.transcription?.segments?.length > 0;
+  const hasLabels = analysis?.labels?.length > 0;
+  const hasFaces = analysis?.faces?.length > 0;
+  const hasEntities = analysis?.entities?.length > 0;
+  const hasModeration = analysis?.moderation?.length > 0;
+  const hasGenAI = analysis?.genai?.descriptions?.length > 0 || analysis?.genai?.summary;
+
   return (
     <div className="max-w-6xl mx-auto">
       <MediaHeader asset={asset} />
@@ -49,40 +62,51 @@ export default function MediaDetailPage() {
             <TabsTrigger value="labels">Labels</TabsTrigger>
             <TabsTrigger value="faces">Faces</TabsTrigger>
             <TabsTrigger value="entities">Entities</TabsTrigger>
+            {hasModeration && <TabsTrigger value="moderation">Moderation</TabsTrigger>}
+            {hasGenAI && <TabsTrigger value="genai">AI Insights</TabsTrigger>}
             <TabsTrigger value="technical">Technical</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
             <div className="py-4">
               <p className="text-text-secondary">
-                Overview of analysis results will appear here.
+                {analysis
+                  ? 'Select a tab above to view detailed analysis results.'
+                  : 'Analysis results are not yet available for this asset.'}
               </p>
             </div>
           </TabsContent>
 
           <TabsContent value="transcription">
-            <div className="py-4">
-              <p className="text-text-secondary">Transcription content — populated in Task 9.</p>
-            </div>
+            <TranscriptionView segments={analysis?.transcription?.segments || []} />
           </TabsContent>
 
           <TabsContent value="labels">
-            <div className="py-4">
-              <p className="text-text-secondary">Labels content — populated in Task 9.</p>
-            </div>
+            <LabelsView labels={analysis?.labels || []} />
           </TabsContent>
 
           <TabsContent value="faces">
-            <div className="py-4">
-              <p className="text-text-secondary">Faces content — populated in Task 9.</p>
-            </div>
+            <FacesView faces={analysis?.faces || []} />
           </TabsContent>
 
           <TabsContent value="entities">
-            <div className="py-4">
-              <p className="text-text-secondary">Entities content — populated in Task 9.</p>
-            </div>
+            <EntitiesView entities={analysis?.entities || []} />
           </TabsContent>
+
+          {hasModeration && (
+            <TabsContent value="moderation">
+              <ModerationView flags={analysis?.moderation || []} />
+            </TabsContent>
+          )}
+
+          {hasGenAI && (
+            <TabsContent value="genai">
+              <GenAIView
+                descriptions={analysis?.genai?.descriptions || []}
+                summary={analysis?.genai?.summary}
+              />
+            </TabsContent>
+          )}
 
           <TabsContent value="technical">
             <TechnicalInfo asset={asset} />
