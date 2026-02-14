@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ChevronRight, RotateCcw, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,6 @@ const statusVariants: Record<string, 'default' | 'success' | 'destructive' | 'wa
 
 export function MediaHeader({ asset, onReanalyze, onDelete }: MediaHeaderProps) {
   const { canWrite, canModify } = useAuthStore();
-  const navigate = useNavigate();
 
   if (!asset) return null;
 

@@ -39,10 +39,6 @@ export default function MediaDetailPage() {
     );
   }
 
-  const hasTranscription = analysis?.transcription?.segments?.length > 0;
-  const hasLabels = analysis?.labels?.length > 0;
-  const hasFaces = analysis?.faces?.length > 0;
-  const hasEntities = analysis?.entities?.length > 0;
   const hasModeration = analysis?.moderation?.length > 0;
   const hasGenAI = analysis?.genai?.descriptions?.length > 0 || analysis?.genai?.summary;
 

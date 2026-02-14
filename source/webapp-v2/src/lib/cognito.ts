@@ -248,15 +248,10 @@ export interface ChallengeResponse {
 }
 
 let refreshTimer: ReturnType<typeof setTimeout> | null = null;
-let onTokenRefreshed: (() => void) | null = null;
 
 function getIdpClient(): CognitoIdentityProviderClient {
   const config = getConfig();
   return new CognitoIdentityProviderClient({ region: config.Region });
-}
-
-export function setOnTokenRefreshed(cb: () => void) {
-  onTokenRefreshed = cb;
 }
 
 export async function signIn(
@@ -412,7 +407,6 @@ export async function refreshSession(refreshToken: string): Promise<AuthTokens> 
   );
 
   const result = response.AuthenticationResult!;
-  const username = localStorage.getItem('cognito.username') || '';
 
   return {
     accessToken: result.AccessToken!,

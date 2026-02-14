@@ -21,10 +21,9 @@ let _config: SolutionConfig | null = null;
 
 export async function loadConfig(): Promise<SolutionConfig> {
   if (_config) return _config;
-  // solution-manifest.js sets window.SolutionManifest
-  await import('/solution-manifest.js');
+  // solution-manifest.js is loaded via <script> tag in index.html before this runs
   _config = (window as any).SolutionManifest;
-  if (!_config) throw new Error('SolutionManifest not found');
+  if (!_config) throw new Error('SolutionManifest not found. Ensure solution-manifest.js is loaded.');
   return _config;
 }
 

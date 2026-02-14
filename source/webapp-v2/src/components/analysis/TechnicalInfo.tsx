@@ -1,4 +1,4 @@
-import { formatFileSize, formatDuration } from '@/lib/utils';
+import { formatFileSize } from '@/lib/utils';
 
 interface TechnicalInfoProps {
   asset: {
